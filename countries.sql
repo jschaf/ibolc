@@ -2,7 +2,7 @@
 -- Dumping data for table country
 --
 
-INSERT INTO country (iso, name, nice_name, iso3, numcode, phonecode) VALUES
+INSERT INTO country (iso, name, nice_name, iso3, num_code, phone_code) VALUES
 ('AF', 'AFGHANISTAN', 'Afghanistan', 'AFG', 4, 93),
 ('AL', 'ALBANIA', 'Albania', 'ALB', 8, 355),
 ('DZ', 'ALGERIA', 'Algeria', 'DZA', 12, 213),
@@ -243,7 +243,7 @@ INSERT INTO country (iso, name, nice_name, iso3, numcode, phonecode) VALUES
 ('ZM', 'ZAMBIA', 'Zambia', 'ZMB', 894, 260),
 ('ZW', 'ZIMBABWE', 'Zimbabwe', 'ZWE', 716, 263),
 ('RS', 'SERBIA', 'Serbia', 'SRB', 688, 381),
-('AP', 'ASIA PACIFIC REGION', 'Asia / Pacific Region', '0', 0, 0),
+('AP', 'ASIA PACIFIC REGION', 'Asia / Pacific Region', '---', 0, 0),
 ('ME', 'MONTENEGRO', 'Montenegro', 'MNE', 499, 382),
 ('AX', 'ALAND ISLANDS', 'Aland Islands', 'ALA', 248, 358),
 ('BQ', 'BONAIRE, SINT EUSTATIUS AND SABA', 'Bonaire, Sint Eustatius and Saba', 'BES', 535, 599),

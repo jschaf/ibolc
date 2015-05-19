@@ -5,12 +5,12 @@ create extension citext;
 
 create table country (
        id serial primary key,
-       iso text not null,
-       name text not null,
+       iso text unique not null,
+       name text unique not null,
        nice_name text not null,
        iso3 text,
        num_code smallint,
-       phonecode numeric(5)
+       phone_code numeric(5)
 
        constraint country_ck_iso_2_char
                   check (char_length(iso) = 2),
@@ -24,29 +24,29 @@ create table state (
        name text not null
 );
 
-create domain phone_number as text(
+create domain phone_number as text
        constraint phone_number_ck_length
-                  check (char_length(phone_number) between 7 and 15)
-);
+                  check (char_length(value) between 7 and 15)
+;
 
-create domain zipcode as text (
+create domain zipcode as text
        constraint zipcode_ck_length_limit
-                  check (char_length(zipcode) < 13),
+                  check (char_length(value) < 13)
        constraint zipcode_ck_only_numeric_hyphens
-                  check(zipcode ~ '\d{5}(-\d{4}(-\d{2})?)?')
-);
+                  check(value ~ '\d{5}(-\d{4}(-\d{2})?)?')
+;
 
-create domain email as citext (
+create domain email as citext
        constraint email_ck_format
-                  check (email ~ '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'),
-       constraint email_ck_length check (char_length(email) between 3 and 255)
-);
+                  check (value ~ '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+       constraint email_ck_length check (char_length(value) between 3 and 255)
+;
 
 create table branch (
        id serial primary key,
        common_name text not null,
        full_name text not null,
-       code text,
+       code text
 );
 
 create table address (
@@ -55,13 +55,13 @@ create table address (
        address2 text,
        address3 text,
        city text not null,
-       state state references state (id),
+       state serial references state (id),
        postal_code zipcode
 
        constraint address_ck_address1_limit check (char_length(address1) < 120),
        constraint address_ck_address2_limit check (char_length(address2) < 120),
        constraint address_ck_address3_limit check (char_length(address3) < 120),
-       constraint address_ck_city_limit check (char_length(city) < 120),
+       constraint address_ck_city_limit check (char_length(city) < 120)
 );
 
 create table soldier (
@@ -75,7 +75,7 @@ create table soldier (
        address_id serial references address (id),
        cell_phone phone_number,
        email email unique not null,
-       branch_id branch references branch (id),
+       branch_id serial references branch (id),
 
        constraint soldier_ck_first_name_limit
                   check (char_length(first_name) < 80),
@@ -84,10 +84,10 @@ create table soldier (
        constraint soldier_ck_last_name_limit
                   check (char_length(last_name) < 80),
        constraint soldier_ck_age_older_17
-                  check (age(dob) > 17 years),
+                  check (age(dob) > '17 years')
 );
 
-create type mil_componenent as enum (
+create type mil_component as enum (
        'Active',
        'National Guard',
        'Reserve'
