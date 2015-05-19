@@ -1,0 +1,107 @@
+create schema ibolc;
+-- TODO: Naming convention for types, tables and fields
+
+create extension citext;
+
+create table country (
+       id serial primary key,
+       iso text not null,
+       name text not null,
+       nice_name text not null,
+       iso3 text,
+       num_code smallint,
+       phonecode numeric(5)
+
+       constraint country_ck_iso_2_char
+                  check (char_length(iso) = 2),
+       constraint country_ck_iso3_length
+                  check(char_length(iso3) = 3)
+);
+
+create table state (
+       id serial primary key,
+       code char(2) not null,
+       name text not null
+);
+
+create domain phone_number as text(
+       constraint phone_number_ck_length
+                  check (char_length(phone_number) between 7 and 15)
+);
+
+create domain zipcode as text (
+       constraint zipcode_ck_length_limit
+                  check (char_length(zipcode) < 13),
+       constraint zipcode_ck_only_numeric_hyphens
+                  check(zipcode ~ '\d{5}(-\d{4}(-\d{2})?)?')
+);
+
+create domain email as citext (
+       constraint email_ck_format
+                  check (email ~ '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'),
+       constraint email_ck_length check (char_length(email) between 3 and 255)
+);
+
+create table branch (
+       id serial primary key,
+       common_name text not null,
+       full_name text not null,
+       code text,
+);
+
+create table address (
+       id serial primary key,
+       address1 text not null,
+       address2 text,
+       address3 text,
+       city text not null,
+       state state references state (id),
+       postal_code zipcode
+
+       constraint address_ck_address1_limit check (char_length(address1) < 120),
+       constraint address_ck_address2_limit check (char_length(address2) < 120),
+       constraint address_ck_address3_limit check (char_length(address3) < 120),
+       constraint address_ck_city_limit check (char_length(city) < 120),
+);
+
+create table soldier (
+       id serial primary key,
+       first_name text not null,
+       middle_name text,
+       last_name text not null,
+       ssn ssn,
+       dob date,
+       country_id serial references country (id),
+       address_id serial references address (id),
+       cell_phone phone_number,
+       email email unique not null,
+       branch_id branch references branch (id),
+
+       constraint soldier_ck_first_name_limit
+                  check (char_length(first_name) < 80),
+       constraint soldier_ck_middle_name_limit
+                  check (char_length(middle_name) < 80),
+       constraint soldier_ck_last_name_limit
+                  check (char_length(last_name) < 80),
+       constraint soldier_ck_age_older_17
+                  check (age(dob) > 17 years),
+);
+
+create type mil_componenent as enum (
+       'Active',
+       'National Guard',
+       'Reserve'
+);
+
+create table students (
+       component mil_component,
+       branch_id serial references branch (id)
+) inherits (soldier);
+
+
+create table cadre (
+
+) inherits (soldier);
+
+
+create index soldier_ix_last_name on soldier (last_name);

@@ -1,0 +1,4 @@
+
+
+install:
+	pgxn install ssn
