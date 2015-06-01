@@ -67,7 +67,7 @@ class Address(Base):
     address3 = Column(String)
     city = Column(String, nullable=False)
     state_id = Column(Integer, ForeignKey('state.id'))
-
+    zipcode = Column(String, nullable=False)
     state = relationship('State')
 
     def __repr__(self):
@@ -182,7 +182,8 @@ def make_fake_address():
     address = Address(
         address1=fake.street_address(),
         city=fake.city(),
-        state=state_rows[random.randrange(0, num_states)]
+        state=state_rows[random.randrange(0, num_states)],
+        zipcode=fake.postcode()
     )
     return address
 
@@ -204,6 +205,9 @@ def make_fake_student():
     )
     return stud
 
+TOTAL_STUDENTS = 300
 
-a = make_fake_address()
-s = make_fake_student()
+for i in range(TOTAL_STUDENTS):
+    stud = make_fake_student()
+    session.add(stud)
+session.commit()
