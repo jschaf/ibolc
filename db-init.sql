@@ -56,7 +56,7 @@ create table address (
        address3 text,
        city text not null,
        state_id serial references state (id),
-       postal_code zipcode
+       zipcode zipcode not null
 
        constraint address_ck_address1_limit check (char_length(address1) < 120),
        constraint address_ck_address2_limit check (char_length(address2) < 120),
