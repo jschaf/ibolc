@@ -37,8 +37,8 @@ create domain zipcode as text
 ;
 
 create domain email as citext
-       constraint email_ck_format
-                  check (value ~ '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+       -- constraint email_ck_format
+       --            check (value ~ '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
        constraint email_ck_length check (char_length(value) between 3 and 255)
 ;
 
