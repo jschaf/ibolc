@@ -8,7 +8,7 @@ createdb:
 	createuser ibolc
 	createdb ibolc --encoding=utf8 --owner=ibolc
 
-initdb: addRelations addStateData addCountryData
+initdb: addRelations addStateData addCountryData addBranch
 
 connect:
 	psql ibolc ibolc
@@ -21,6 +21,9 @@ addStateData:
 
 addCountryData:
 	psql --file=countries.sql ibolc ibolc
+
+addBranch:
+	psql --file=branches.sql ibolc ibolc
 
 reset:
 	psql --file=reset.sql ibolc ibolc

@@ -44,7 +44,7 @@ create domain email as citext
 
 create table branch (
        id serial primary key,
-       common_name text not null,
+       name text not null,
        full_name text not null,
        code text
 );
@@ -55,13 +55,19 @@ create table address (
        address2 text,
        address3 text,
        city text not null,
-       state serial references state (id),
+       state_id serial references state (id),
        postal_code zipcode
 
        constraint address_ck_address1_limit check (char_length(address1) < 120),
        constraint address_ck_address2_limit check (char_length(address2) < 120),
        constraint address_ck_address3_limit check (char_length(address3) < 120),
        constraint address_ck_city_limit check (char_length(city) < 120)
+);
+
+create type mil_component as enum (
+'Active',
+'National Guard',
+'Reserve'
 );
 
 create table soldier (
@@ -76,6 +82,7 @@ create table soldier (
        cell_phone phone_number,
        email email unique not null,
        branch_id serial references branch (id),
+       component mil_component
 
        constraint soldier_ck_first_name_limit
                   check (char_length(first_name) < 80),
@@ -87,15 +94,8 @@ create table soldier (
                   check (age(dob) > '17 years')
 );
 
-create type mil_component as enum (
-       'Active',
-       'National Guard',
-       'Reserve'
-);
 
-create table students (
-       component mil_component,
-       branch_id serial references branch (id)
+create table student (
 ) inherits (soldier);
 
 

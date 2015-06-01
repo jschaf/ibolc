@@ -1,10 +1,10 @@
-INSERT INTO branch (name, branch_name, code) VALUES
+INSERT INTO branch (name, full_name, code) VALUES
 ('Acquisition Corps', 'Acquisition Corps', 'AC'),
 ('Adjutant General''s Corps', 'Adjutant General''s Corps', 'AG'),
 ('Air Defense Artillery', 'Air Defense Artillery', 'AD'),
 ('Armor','Armor Branch','AR'),
 ('Aviation', 'Aviation', 'AV'),
-('Army Bands', 'Army Bands'),
+('Army Bands', 'Army Bands', NULL),
 ('Chemical Corps', 'Chemical Corps', 'CM'),
 ('Civil Affairs', 'Civil Affairs Corps', 'CA'),
 ('Cyber', 'Cyber Warfare', 'CY'),
@@ -27,11 +27,11 @@ INSERT INTO branch (name, branch_name, code) VALUES
 ('Military Police', 'Military Police Corps', 'MP'),
 ('National Guard', 'National Guard Bureau', 'NG'),
 ('Ordnance Corps', 'Ordnance Corps', 'OD'),
-('Psychological Operations', 'Psychological Operations'),
+('Psychological Operations', 'Psychological Operations', NULL),
 ('Public Affairs', 'Public Affairs', 'PA'),
 ('Quartermaster', 'Quartermaster Corps', 'QM'),
 ('Signal', 'Signal Corps', 'SC'),
 ('Special Forces', 'Special Forces', 'SF'),
 ('Staff Specialist USAR/ARNG', 'Staff Specialist USAR/ARNG', 'SS'),
 ('Transportation Corps', 'Transportation Corps', 'TC'),
-('Chaplain Corps', 'Chaplain Corps', 'CH'),
+('Chaplain Corps', 'Chaplain Corps', 'CH');
