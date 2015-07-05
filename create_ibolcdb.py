@@ -65,6 +65,26 @@ class Email(types.UserDefinedType):
         return process
 
 ischema_names['email'] = Email
+
+
+class PhoneNumber(types.UserDefinedType):
+
+    def get_col_spec(self):
+        return 'phone_number'
+
+    def bind_processor(self, dialect):
+        def process(value):
+            return value
+        return process
+
+    def result_processor(self, dialect, coltype):
+        def process(value):
+            return value
+        return process
+
+ischema_names['phone_number'] = PhoneNumber
+
+
 Base = automap_base()
 
 
@@ -89,9 +109,13 @@ event.listen(Base.metadata, 'before_create',
                  check (char_length(value) between 3 and 255)
              '''))
 
-# TODO: create domains for phone_number, zipcode and email
+event.listen(Base.metadata, 'before_create',
+             DDL('''
+             create domain phone_number as text
+             constraint phone_number_ck_length
+                check (char_length(value) between 7 and 25)
+             '''))
 
-# TODO: add all the column checks
 
 class Country(Base):
     __tablename__ = 'country'
@@ -159,7 +183,7 @@ class Person(Base):
     country = relationship('Country')
     address_id = Column(Integer, ForeignKey('address.id'))
     address = relationship('Address')
-    cell_phone = Column(String)
+    cell_phone = Column(PhoneNumber)
     email = Column(Email, nullable=False)
     type = Column(String)
 
