@@ -26,7 +26,7 @@ create table state (
 
 create domain phone_number as text
        constraint phone_number_ck_length
-                  check (char_length(value) between 7 and 15)
+                  check (char_length(value) between 7 and 25)
 ;
 
 create domain zipcode as text
