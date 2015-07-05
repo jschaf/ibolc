@@ -45,3 +45,7 @@ docs/_build
 # Virtualenvs
 env
 env*
+
+# Bower libs
+/ibolc/static/libs/
+/typings/
