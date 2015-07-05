@@ -52,7 +52,7 @@ ischema_names['zipcode'] = Zipcode
 class Email(types.UserDefinedType):
 
     def get_col_spec(self):
-        return 'zipcode'
+        return 'email'
 
     def bind_processor(self, dialect):
         def process(value):
@@ -69,14 +69,17 @@ Base = automap_base()
 
 
 event.listen(Base.metadata, 'before_create', CreateSchema('ibolc'))
+
 event.listen(Base.metadata, 'before_create',
              DDL('create extension if not exists citext'))
-# TODO: why doesn't the numeric check work
+
 event.listen(Base.metadata, 'before_create',
              DDL("""
              create domain zipcode as text
-             constraint zipcode_ck_length_limit check (char_length(value) <= 10)
-             constraint zipcode_ck_only_numeric_hyphens check(value ~ '^\d{5}([ \-]?\d{4})?$')
+             constraint zipcode_ck_length_limit
+                 check (char_length(value) <= 10)
+             constraint zipcode_ck_only_numeric_hyphens
+                 check(value ~ '^\d{5}([ \-]?\d{4})?$')
              """))
 
 event.listen(Base.metadata, 'before_create',
@@ -210,10 +213,6 @@ class Cadre(Soldier):
 
     def __repr__(self):
         return "<Cadre({})>".format(self.last_name)
-
-import logging
-logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 engine = create_engine('postgresql://ibolc@localhost/ibolc')
 Session = sessionmaker(bind=engine)

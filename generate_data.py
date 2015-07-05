@@ -63,7 +63,7 @@ def make_fake_student():
         ssn=make_fake_ssn(),
         dob=make_fake_dob(),
         country=country,
-        address_id=random.randint(1, TOTAL_STUDENTS),
+        address=make_fake_address(),
         cell_phone=fake.phone_number(),
         email=fake.email(),
         branch=branch,
@@ -72,11 +72,6 @@ def make_fake_student():
 
 
 def main():
-    for i in range(TOTAL_STUDENTS):
-        addy = make_fake_address()
-        session.add(addy)
-    session.commit()
-
     for i in range(TOTAL_STUDENTS):
         stud = make_fake_student()
         session.add(stud)
