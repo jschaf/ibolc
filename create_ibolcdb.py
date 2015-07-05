@@ -29,12 +29,62 @@ class SSN(types.UserDefinedType):
         return process
 
 ischema_names['ssn'] = SSN
+
+
+class Zipcode(types.UserDefinedType):
+
+    def get_col_spec(self):
+        return 'zipcode'
+
+    def bind_processor(self, dialect):
+        def process(value):
+            return value
+        return process
+
+    def result_processor(self, dialect, coltype):
+        def process(value):
+            return value
+        return process
+
+ischema_names['zipcode'] = Zipcode
+
+
+class Email(types.UserDefinedType):
+
+    def get_col_spec(self):
+        return 'zipcode'
+
+    def bind_processor(self, dialect):
+        def process(value):
+            return value
+        return process
+
+    def result_processor(self, dialect, coltype):
+        def process(value):
+            return value
+        return process
+
+ischema_names['email'] = Email
 Base = automap_base()
 
 
 event.listen(Base.metadata, 'before_create', CreateSchema('ibolc'))
 event.listen(Base.metadata, 'before_create',
              DDL('create extension if not exists citext'))
+# TODO: why doesn't the numeric check work
+event.listen(Base.metadata, 'before_create',
+             DDL("""
+             create domain zipcode as text
+             constraint zipcode_ck_length_limit check (char_length(value) <= 10)
+             constraint zipcode_ck_only_numeric_hyphens check(value ~ '^\d{5}([ \-]?\d{4})?$')
+             """))
+
+event.listen(Base.metadata, 'before_create',
+             DDL('''
+             create domain email as citext
+                 constraint email_ck_length
+                 check (char_length(value) between 3 and 255)
+             '''))
 
 # TODO: create domains for phone_number, zipcode and email
 
@@ -83,7 +133,7 @@ class Address(Base):
     address3 = Column(String)
     city = Column(String, nullable=False)
     state_id = Column(Integer, ForeignKey('state.id'))
-    zipcode = Column(String, nullable=False)
+    zipcode = Column(Zipcode, nullable=False)
     state = relationship('State')
 
     def __repr__(self):
@@ -107,7 +157,7 @@ class Person(Base):
     address_id = Column(Integer, ForeignKey('address.id'))
     address = relationship('Address')
     cell_phone = Column(String)
-    email = Column(CIText, nullable=False)
+    email = Column(Email, nullable=False)
     type = Column(String)
 
     __mapper_args__ = {
@@ -161,6 +211,10 @@ class Cadre(Soldier):
     def __repr__(self):
         return "<Cadre({})>".format(self.last_name)
 
+import logging
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
 engine = create_engine('postgresql://ibolc@localhost/ibolc')
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -168,7 +222,19 @@ Base.prepare(engine, reflect=True)
 
 
 def main():
+    connection = engine.connect()
     Base.metadata.create_all(engine)
+    with open('db/countries.sql', 'r') as countries:
+        raw_sql = countries.read()
+        connection.execute(raw_sql)
+
+    with open('db/branches.sql', 'r') as branches:
+        raw_sql = branches.read()
+        connection.execute(raw_sql)
+
+    with open('db/states.sql', 'r') as states:
+        raw_sql = states.read()
+        connection.execute(raw_sql)
 
 if __name__ == '__main__':
     main()

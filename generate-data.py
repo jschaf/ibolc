@@ -51,6 +51,7 @@ def make_fake_address():
     )
     return address
 
+TOTAL_STUDENTS = 300
 def make_fake_student():
     country = country_rows[random.randrange(0, num_countries)]
     branch = branch_rows[random.randrange(0, num_branches)]
@@ -62,7 +63,7 @@ def make_fake_student():
         ssn=make_fake_ssn(),
         dob=make_fake_dob(),
         country=country,
-        address=make_fake_address(),
+        address_id=random.randint(1, TOTAL_STUDENTS),
         cell_phone=fake.phone_number(),
         email=fake.email(),
         branch=branch,
@@ -70,9 +71,16 @@ def make_fake_student():
     return stud
 
 
-TOTAL_STUDENTS = 300
-def fill_db():
+def main():
+    for i in range(TOTAL_STUDENTS):
+        addy = make_fake_address()
+        session.add(addy)
+    session.commit()
+
     for i in range(TOTAL_STUDENTS):
         stud = make_fake_student()
         session.add(stud)
     session.commit()
+
+if __name__ == '__main__':
+    main()
