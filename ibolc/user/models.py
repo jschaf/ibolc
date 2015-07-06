@@ -26,14 +26,16 @@ class Role(SurrogatePK, Model):
     def __repr__(self):
         return '<Role({name})>'.format(name=self.name)
 
-class User(UserMixin, SurrogatePK, Model):
 
+class User(UserMixin, SurrogatePK, Model):
     __tablename__ = 'users'
+
     username = Column(db.String(80), unique=True, nullable=False)
     email = Column(db.String(80), unique=True, nullable=False)
     #: The hashed password
     password = Column(db.String(128), nullable=True)
-    created_at = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
+    created_at = Column(db.DateTime, nullable=False,
+                        default=dt.datetime.utcnow)
     first_name = Column(db.String(30), nullable=True)
     last_name = Column(db.String(30), nullable=True)
     active = Column(db.Boolean(), default=False)
