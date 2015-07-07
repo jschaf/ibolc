@@ -10,6 +10,8 @@ from ibolc.app import create_app
 from ibolc.user.models import User
 from ibolc.settings import DevConfig, ProdConfig
 from ibolc.database import db
+from ibolc import fake_data
+
 
 if os.environ.get("IBOLC_ENV") == 'prod':
     app = create_app(ProdConfig)
@@ -34,9 +36,17 @@ def test():
     exit_code = pytest.main([TEST_PATH, '--verbose'])
     return exit_code
 
+DataManager = Manager(usage="Add and drop data from the database.")
+
+@DataManager.command
+def populate():
+    """Fill the database with fake data."""
+    fake_data.fill_all()
+
 manager.add_command('server', Server())
 manager.add_command('shell', Shell(make_context=_make_context))
 manager.add_command('db', MigrateCommand)
+manager.add_command('data', DataManager)
 
 if __name__ == '__main__':
     manager.run()
