@@ -14,13 +14,12 @@ from ibolc.extensions import (
 )
 
 # pylint: disable=unused-import
+
+from ibolc import (  # noqa
+    Address, Branch, Cadre, Country, MilComponent, Person, Soldier, State,
+    Student
+)
 from ibolc import public, user
-from ibolc.branch.models import Branch
-from ibolc.cadre.models import Cadre
-from ibolc.country.models import Country
-from ibolc.person.models import Person
-from ibolc.soldier.models import Soldier
-from ibolc.student.models import Student
 
 
 def create_app(config_object=ProdConfig):

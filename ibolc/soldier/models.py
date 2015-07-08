@@ -1,14 +1,18 @@
 from ibolc.database import (
     Column,
+    db,
+    Model,
     ReferenceCol,
-    relationship
+    relationship,
+    SurrogatePK,
 )
 from ibolc.person.models import Person
 
-from sqlalchemy.dialects.postgresql import ENUM
 
-mil_component_enum = ENUM('Active', 'National Guard', 'Reserve',
-                          name='mil_component')
+class MilComponent(Model, SurrogatePK):
+    __tablename__ = 'mil_component'
+    name = Column(db.String, nullable=False)
+    abbreviation = Column(db.String, nullable=False)
 
 
 class Soldier(Person):
@@ -16,7 +20,8 @@ class Soldier(Person):
     id = ReferenceCol('person', primary_key=True)
     branch_id = ReferenceCol('branch')
     branch = relationship('Branch')
-    component = Column('component', mil_component_enum)
+    mil_component_id = ReferenceCol('mil_component')
+    mil_component = relationship('MilComponent')
 
     __mapper_args__ = {
         'polymorphic_identity': 'soldier',

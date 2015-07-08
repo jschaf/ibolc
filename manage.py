@@ -6,12 +6,18 @@ import subprocess
 from flask_script import Manager, Shell, Server
 from flask_migrate import MigrateCommand
 
+from ibolc import (
+    Address, Branch, Cadre, Country, MilComponent, Person, Soldier, State, Student,
+)
 from ibolc.app import create_app
 from ibolc.user.models import User
 from ibolc.settings import DevConfig, ProdConfig
 from ibolc.database import db
-from ibolc import fake_data
+from ibolc import real_data
 
+
+IBOLC_MODELS = [Address, Branch, Cadre, Country, MilComponent, Person, Soldier,
+                State, Student, User]
 
 if os.environ.get("IBOLC_ENV") == 'prod':
     app = create_app(ProdConfig)
@@ -27,7 +33,10 @@ def _make_context():
     """Return context dict for a shell session so you can access
     app, db, and the User model by default.
     """
-    return {'app': app, 'db': db, 'User': User}
+    return {'app': app, 'db': db, 'User': User, 'Address': Address,
+            'Branch': Branch, 'Cadre': Cadre, 'Country': Country,
+            'Person': Person, 'Soldier': Soldier, 'State': State,
+            'Student': Student}
 
 @manager.command
 def test():
@@ -38,10 +47,56 @@ def test():
 
 DataManager = Manager(usage="Add and drop data from the database.")
 
+
+@DataManager.option('-d', '--data-type', dest='data_type', default='all')
+def populate(data_type):
+    """Fill the database with data, real and fake."""
+
+    from ibolc import factories
+    def smart_populate_states():
+        "Sanity check, don't add States if they already exist."
+        if State.query.count() > 0:
+            print('Skipping adding real data since it seems to already exist.')
+        else:
+            real_data.populate_all()
+
+    if data_type == 'all':
+        smart_populate_states()
+        factories.populate_fake_data()
+    elif data_type == 'real':
+        smart_populate_states()
+    elif data_type == 'fake':
+        factories.populate_fake_data()
+    db.session.commit()
+
+
 @DataManager.command
-def populate():
-    """Fill the database with fake data."""
-    fake_data.fill_all()
+def delete_all():
+    """Remove all rows from the table."""
+    for model in IBOLC_MODELS:
+        rows_deleted = model.query.delete()
+        print("{}: {} rows deleted".format(model.__name__, rows_deleted))
+    db.session.commit()
+
+
+@DataManager.command
+def count():
+    for model in IBOLC_MODELS:
+        total_rows = model.query.count()
+        print("{}: {} rows total".format(model.__name__, total_rows))
+
+
+@DataManager.command
+def create_all():
+    """Add all flask models to the database."""
+    db.app = app
+    db.create_all()
+
+@DataManager.command
+def drop_all():
+    """Remove all data from the database."""
+    db.app = app
+    db.drop_all()
 
 manager.add_command('server', Server())
 manager.add_command('shell', Shell(make_context=_make_context))

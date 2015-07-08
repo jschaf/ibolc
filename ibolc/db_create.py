@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, DDL, event
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.schema import CreateSchema
 
 

@@ -1,6 +1,4 @@
 from ibolc.database import (
-    Column,
-    db,
     ReferenceCol
 )
 from ibolc.soldier.models import Soldier
