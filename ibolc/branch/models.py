@@ -13,6 +13,6 @@ class Branch(Model):
     code = Column(db.String)
 
     def __repr__(self):
-        return "<Branch({})>".format(self.code)
+        return "<Branch({})>".format(self.name)
 
 # TODO: add rank

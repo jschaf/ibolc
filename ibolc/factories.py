@@ -101,7 +101,7 @@ class SoldierFactory(PersonFactory):
         model = Soldier
 
 
-class CadreFactory(PersonFactory):
+class CadreFactory(SoldierFactory):
     type = 'cadre'
 
     class Meta:
@@ -116,6 +116,5 @@ class StudentFactory(SoldierFactory):
 
 
 def populate_fake_data():
-    StudentFactory.create_batch(300)
-    CadreFactory.create_batch(50)
-
+    StudentFactory.create_batch(100)
+    CadreFactory.create_batch(100)

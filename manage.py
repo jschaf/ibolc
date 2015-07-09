@@ -53,7 +53,7 @@ def populate(data_type):
     """Fill the database with data, real and fake."""
 
     from ibolc import factories
-    def smart_populate_states():
+    def smart_populate_real_data():
         "Sanity check, don't add States if they already exist."
         if State.query.count() > 0:
             print('Skipping adding real data since it seems to already exist.')
@@ -61,10 +61,12 @@ def populate(data_type):
             real_data.populate_all()
 
     if data_type == 'all':
-        smart_populate_states()
+        smart_populate_real_data()
+        # Must commit real data here so it can be used for the fake data.
+        db.session.commit()
         factories.populate_fake_data()
     elif data_type == 'real':
-        smart_populate_states()
+        smart_populate_real_data()
     elif data_type == 'fake':
         factories.populate_fake_data()
     db.session.commit()
@@ -73,9 +75,9 @@ def populate(data_type):
 @DataManager.command
 def delete_all():
     """Remove all rows from the table."""
-    for model in IBOLC_MODELS:
-        rows_deleted = model.query.delete()
-        print("{}: {} rows deleted".format(model.__name__, rows_deleted))
+    for table in reversed(db.metadata.sorted_tables):
+        rows_deleted = db.session.execute(table.delete()).rowcount
+        print("{}: {} rows deleted".format(table.name, rows_deleted))
     db.session.commit()
 
 

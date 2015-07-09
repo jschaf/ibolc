@@ -1,6 +1,6 @@
-from ibolc.branch.models import Branch
-from ibolc.cadre.models import Cadre
-from ibolc.country.models import Country
-from ibolc.person.models import Address, Person, State
-from ibolc.soldier.models import Soldier, MilComponent
-from ibolc.student.models import Student
+from ibolc.branch.models import Branch  # noqa
+from ibolc.cadre.models import Cadre  # noqa
+from ibolc.country.models import Country  # noqa
+from ibolc.person.models import Address, Person, State  # noqa
+from ibolc.soldier.models import Soldier, MilComponent  # noqa
+from ibolc.student.models import Student  # noqa
