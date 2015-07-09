@@ -22,7 +22,7 @@ class ProdConfig(Config):
     ENV = 'prod'
     DEBUG = False
     # TODO: Change me
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/example'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://ibolc@localhost/ibolc'
     DEBUG_TB_ENABLED = False  # Disable Debug toolbar
 
 
