@@ -1,0 +1,39 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+
+  <h1>IBOLC Student List</h1>
+
+</div><!-- /.jumbotron -->
+
+<div class="body-content">
+  <div class="row">
+      <table>
+        <thead>
+          <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>SSN</th>
+            <th>DOB</th>
+            <th>Country</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+            <tr>
+              <td>{{ student.last_name }}</td>
+              <td>{{ student.first_name }}</td>
+              <td>{{ student.ssn }}</td>
+              <td>{{ student.dob }}</td>
+              <td>{{ student.country.nice_name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody> 
+      </table>
+   </div>
+  </div><!-- /.row -->
+</div>
+{% endblock %}
+

@@ -19,7 +19,7 @@ from ibolc import (  # noqa
     Address, Branch, Cadre, Country, MilComponent, Person, Soldier, State,
     Student
 )
-from ibolc import public, user
+from ibolc import public, user, student
 
 
 def create_app(config_object=ProdConfig):
@@ -50,6 +50,7 @@ def register_extensions(app):
 def register_blueprints(app):
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
+    app.register_blueprint(student.views.blueprint)
     return None
 
 
