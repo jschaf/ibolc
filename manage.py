@@ -75,6 +75,9 @@ def populate(data_type):
 @DataManager.command
 def delete_all():
     """Remove all rows from the table."""
+    # sorted_tables returns tables in foreign key dependency order, that is,
+    # each table is preceeded by all tables which it references. But, we need it
+    # reveresed to drop the table that depends on the most foreign keys.
     for table in reversed(db.metadata.sorted_tables):
         rows_deleted = db.session.execute(table.delete()).rowcount
         print("{}: {} rows deleted".format(table.name, rows_deleted))
