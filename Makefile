@@ -41,6 +41,8 @@ rsync:
 	  ./                                                   \
 	  $(PROD_SSH_USER):$(PROD_PATH)
 
+# TODO: Verify that IBOLC_ENV is set to 'prod'
+
 .PHONY: setup-python
 setup-python:
 	ssh $(PROD_SSH_USER) "cd $(PROD_PATH)     \
