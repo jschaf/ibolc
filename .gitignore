@@ -43,8 +43,8 @@ docs/_build
 .webassets-cache
 
 # Virtualenvs
-env
-env*
+venv/
+!env.py
 
 # Bower libs
 /ibolc/static/libs/
