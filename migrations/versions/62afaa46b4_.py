@@ -36,6 +36,15 @@ def upgrade():
             check(value ~ '^\d{5}([ \-]?\d{4})?$')
     ''')
 
+    #TODO: install SSN type on heroku.
+    op.execute('''
+        create domain ssn as text
+        constraint ssn_ck_length_limit
+            check (char_length(value) <= 11)
+        constraint ssn_ck_only_numeric_hyphens
+            check(value ~ '^\d{3}-?\d{2}-?\d{4}$')
+    ''')
+
     op.create_table('branch',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
