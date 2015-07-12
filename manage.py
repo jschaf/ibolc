@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import sys
-import subprocess
 from flask_script import Manager, Shell, Server
 from flask_migrate import MigrateCommand
 
@@ -19,7 +17,11 @@ from ibolc import real_data
 IBOLC_MODELS = [Address, Branch, Cadre, Country, MilComponent, Person, Soldier,
                 State, Student, User]
 
-if os.environ.get("IBOLC_ENV") == 'prod':
+
+def is_production():
+    return os.environ.get('HEROKU') == '1'
+
+if is_production():
     app = create_app(ProdConfig)
 else:
     app = create_app(DevConfig)
