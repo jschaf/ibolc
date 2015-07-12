@@ -56,7 +56,7 @@ def populate(data_type):
 
     from ibolc import factories
     def smart_populate_real_data():
-        "Sanity check, don't add States if they already exist."
+        "Sanity check, don't add data if it already exists."
         if State.query.count() > 0:
             print('Skipping adding real data since it seems to already exist.')
         else:
