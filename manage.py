@@ -65,6 +65,7 @@ def populate(data_type):
     if data_type == 'all':
         smart_populate_real_data()
         # Must commit real data here so it can be used for the fake data.
+        db.session.flush()
         db.session.commit()
         factories.populate_fake_data()
     elif data_type == 'real':
