@@ -23,7 +23,7 @@ class ProdConfig(Config):
     DEBUG = False
     # TODO: Change me
     SQLALCHEMY_DATABASE_URI = os_env.get('DATABASE_URL')
-    DEBUG_TB_ENABLED = True  # Disable Debug toolbar
+    DEBUG_TB_ENABLED = False  # Disable Debug toolbar
 
 
 class DevConfig(Config):
