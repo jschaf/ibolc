@@ -5,8 +5,9 @@ from flask import (Blueprint, request, render_template,
 from flask.ext.login import login_user, login_required, logout_user
 
 from ibolc.extensions import login_manager
-from ibolc.user.models import User
 from ibolc.public.forms import LoginForm
+from ibolc.student.models import Student
+from ibolc.user.models import User
 from ibolc.user.forms import RegisterForm
 from ibolc.utils import flash_errors
 
@@ -30,7 +31,7 @@ def home():
             return redirect(redirect_url)
         else:
             flash_errors(form)
-    return render_template("public/home.html", form=form)
+    return render_template("public/home.html", form=form, students=Student.query.all())
 
 
 @blueprint.route('/logout/')

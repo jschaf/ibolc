@@ -1,15 +1,17 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron">
-
-  <h1>2LT {{ student.last_name }}, {{ student.first_name }}</h1>
-
-</div><!-- /.jumbotron -->
 
 <div class="body-content">
   <div class="row">
+  <h1>2LT {{ student.last_name }}, {{ student.first_name }}</h1>
+  <h2>Actions</h2>
+  <button type="button" class="btn btn-default">Add Grade</button>
+  <button type="button" class="btn btn-default">Create Counseling</button>
+  <button type="button" class="btn btn-default">Generate AER</button>
+  <button type="button" class="btn btn-warning">Recycle Student</button>
+  <button type="button" class="btn btn-danger">Delete Student</button>
+
     <h2>Graded Events</h2>
       <table class="table">
         <thead>
@@ -25,6 +27,18 @@
               <td>APFT</td>
               <td>2015-06-20</td>
               <td>287</td>
+              <td>90%</td>
+            </tr>
+            <tr>
+              <td>OPORD 1</td>
+              <td>2015-07-08</td>
+              <td>40</td>
+              <td>80%</td>
+            </tr>
+            <tr>
+              <td>OPORD 2</td>
+              <td>2015-07-18</td>
+              <td>45</td>
               <td>90%</td>
             </tr>
         </tbody> 
