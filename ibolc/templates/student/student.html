@@ -1,0 +1,36 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+
+  <h1>2LT {{ student.last_name }}, {{ student.first_name }}</h1>
+
+</div><!-- /.jumbotron -->
+
+<div class="body-content">
+  <div class="row">
+    <h2>Graded Events</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Raw Score</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>APFT</td>
+              <td>2015-06-20</td>
+              <td>287</td>
+              <td>90%</td>
+            </tr>
+        </tbody> 
+      </table>
+   </div>
+  </div><!-- /.row -->
+</div>
+{% endblock %}
+

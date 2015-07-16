@@ -10,7 +10,7 @@
 
 <div class="body-content">
   <div class="row">
-      <table>
+      <table class="table">
         <thead>
           <tr>
             <th>Last Name</th>
@@ -23,7 +23,7 @@
         <tbody>
           {% for student in students %}
             <tr>
-              <td>{{ student.last_name }}</td>
+              <td><a href="{{ url_for('.get_student', student_id=student.id) }}">{{ student.last_name }}</a></td>
               <td>{{ student.first_name }}</td>
               <td>{{ student.ssn }}</td>
               <td>{{ student.dob }}</td>
