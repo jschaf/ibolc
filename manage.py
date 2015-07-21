@@ -7,6 +7,8 @@ from flask_migrate import MigrateCommand
 from ibolc import (
     Address, Branch, Cadre, Country, MilComponent, Person, Soldier, State, Student,
 )
+
+from ibolc.formation.models import Formation, SoldierFormation
 from ibolc.app import create_app
 from ibolc.user.models import User
 from ibolc.settings import DevConfig, ProdConfig
@@ -14,8 +16,8 @@ from ibolc.database import db
 from ibolc import real_data
 
 
-IBOLC_MODELS = [Address, Branch, Cadre, Country, MilComponent, Person, Soldier,
-                State, Student, User]
+IBOLC_MODELS = [Address, Branch, Cadre, Country, Formation, MilComponent, Person, Soldier,
+                SoldierFormation, State, Student, User]
 
 
 def is_production():
@@ -35,10 +37,9 @@ def _make_context():
     """Return context dict for a shell session so you can access
     app, db, and the User model by default.
     """
-    return {'app': app, 'db': db, 'User': User, 'Address': Address,
-            'Branch': Branch, 'Cadre': Cadre, 'Country': Country,
-            'Person': Person, 'Soldier': Soldier, 'State': State,
-            'Student': Student}
+    context = {'app': app, 'db': db}
+    context.update({model.__name__: model for model in IBOLC_MODELS})
+    return context
 
 @manager.command
 def test():
