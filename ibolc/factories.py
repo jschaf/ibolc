@@ -140,7 +140,7 @@ class UICProvider(BaseProvider):
 
 class FormationNameProvider(BaseProvider):
     formation_names = ('Alpha', 'Bravo', 'Charlie', 'Delta',
-                       'Echo', 'Golf', 'Foxtrot' 'HHC')
+                       'Echo', 'Golf', 'Foxtrot', 'HHC')
 
 
     @classmethod
@@ -155,16 +155,38 @@ class FormationFactory(BaseFactory):
     class Meta:
         model = Formation
 
+# See this link for details on how this works:
+# http://factoryboy.readthedocs.org/en/latest/recipes.html#manytomany-with-a-through
 class SoldierFormationFactory(BaseFactory):
 
+    soldier = factory.SubFactory(SoldierFactory)
+    formation = factory.SubFactory(FormationFactory)
+
+    start_date = lazy_attribute(lambda n: fake.date_time_between(start_date='-2y', end_date='-1y'))
+    end_date = lazy_attribute(lambda n: fake.date_time_between(start_date='-1y', end_date='now'))
 
     class Meta:
         model = SoldierFormation
 
-def populate_fake_data():
-    StudentFactory.create_batch(100)
-    CadreFactory.create_batch(100)
 
+
+def populate_companies():
     company_names = ('Alpha', 'Bravo', 'Charlie', 'Delta', 'HHC')
     for name in company_names:
         FormationFactory(name=name)
+
+populate_companies()
+company_rows = db.session.query(Formation).all()
+
+
+class FormationWithSoldiersFactory(FormationFactory):
+    soldier = factory.RelatedFactory(SoldierFactory)
+    # formation = lazy_attribute(lambda n:  random.choice(company_rows))
+
+
+def populate_fake_data():
+    # StudentFactory.create_batch(100)
+    # CadreFactory.create_batch(100)
+    FormationWithSoldiersFactory.create_batch(300)
+
+

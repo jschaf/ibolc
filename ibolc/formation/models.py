@@ -8,8 +8,8 @@ class Formation(db.Model, SurrogatePK):
     office_code = Column(db.String, nullable=False)
     uic = Column(db.String, nullable=False)
 
-    soldiers = relationship('SoldierFormation',
-                            secondary='SoldierFormation',
+    soldiers = relationship('Soldier',
+                            secondary='soldier_formation',
                             viewonly=True)
 
     def __repr__(self):
