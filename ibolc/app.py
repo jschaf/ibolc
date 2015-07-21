@@ -19,6 +19,9 @@ from ibolc import (  # noqa
     Address, Branch, Cadre, Country, MilComponent, Person, Soldier, State,
     Student
 )
+
+from .formation.models import Formation
+
 from ibolc import public, user, student
 
 
