@@ -22,6 +22,9 @@ class Soldier(Person):
     branch = relationship('Branch')
     mil_component_id = ReferenceCol('mil_component')
     mil_component = relationship('MilComponent')
+    formations = relationship('SoldierFormationJoin',
+                              secondary='SoldierFormationJoin',
+                              viewonly=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'soldier',

@@ -3,11 +3,15 @@ from factory import Sequence, PostGenerationMethodCall, lazy_attribute
 from factory.alchemy import SQLAlchemyModelFactory
 
 import faker
+from faker.providers import BaseProvider
 
 from ibolc import (
     Address, Branch, Cadre, Country, MilComponent, Person, Soldier, State,
     Student
 )
+
+from .formation.models import Formation, SoldierFormation
+
 from ibolc.user.models import User
 from ibolc.database import db
 
@@ -115,6 +119,52 @@ class StudentFactory(SoldierFactory):
         model = Student
 
 
+class OfficeCodeProvider(BaseProvider):
+    office_code_formats = ('????', '????-??', '????-???', '????-??-?',
+                           '????-???-??')
+
+
+    @classmethod
+    def office_code(cls):
+        return cls.lexify(cls.random_element(cls.office_code_formats))
+
+
+class UICProvider(BaseProvider):
+    uic_formats = ('W#####',)
+
+
+    @classmethod
+    def uic(cls):
+        return cls.bothify(cls.random_element(cls.uic_formats))
+
+
+class FormationNameProvider(BaseProvider):
+    formation_names = ('Alpha', 'Bravo', 'Charlie', 'Delta',
+                       'Echo', 'Golf', 'Foxtrot' 'HHC')
+
+
+    @classmethod
+    def formation_name(cls):
+        return cls.random_element(cls.formation_names)
+
+class FormationFactory(BaseFactory):
+    name = lazy_attribute(lambda n: FormationNameProvider.formation_name())
+    office_code = lazy_attribute(lambda n: OfficeCodeProvider.office_code())
+    uic = lazy_attribute(lambda n: UICProvider.uic())
+
+    class Meta:
+        model = Formation
+
+class SoldierFormationFactory(BaseFactory):
+
+
+    class Meta:
+        model = SoldierFormation
+
 def populate_fake_data():
     StudentFactory.create_batch(100)
     CadreFactory.create_batch(100)
+
+    company_names = ('Alpha', 'Bravo', 'Charlie', 'Delta', 'HHC')
+    for name in company_names:
+        FormationFactory(name=name)
